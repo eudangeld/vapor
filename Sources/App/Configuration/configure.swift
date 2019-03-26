@@ -11,7 +11,17 @@ public func configure(
     let router = EngineRouter.default()
     try routes(router)
     services.register(router, as: Router.self)
-    let leafProvider = LeafProvider()    // added
-    try services.register(leafProvider)  // added
+    let leafProvider = LeafProvider()
+    try services.register(leafProvider)
+    try services.register(FluentSQLiteProvider())
+    
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+    
+    var dataBases = DatabasesConfig()
+    try dataBases.add(database:SQLiteDatabase(storage: .memory), as: .sqlite)
+    services.register(dataBases)
+    
+    var migration = MigrationConfig()
+    migration.add(model:User.self,database: .sqlite)
+    services.register(migration)
 }
