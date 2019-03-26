@@ -7,11 +7,12 @@ public func routes(_ router: Router) throws {
         return "It works!"
     }
     
-    // Basic "Hello, world!" example
-    router.get("hello") { req in
-        
-        
-        return req.description
-    }
-
+    let userController = UserController()
+    let viewController = ViewController()
+    
+    
+    router.get("getCities", Int.parameter,use:userController.sayHello)
+    router.get("view",use:viewController.view)
+    
+    
 }
